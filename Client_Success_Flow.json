@@ -1,0 +1,31 @@
+{
+  "displayName": "Client Success Monitoring",
+  "description": "Monitors client health and triggers interventions",
+  "triggerType": "Microsoft Forms - When a new response is submitted",
+  "actions": [
+    {
+      "name": "Calculate Health Score",
+      "type": "Compose",
+      "formula": "div(add(triggerOutputs()?['body/SatisfactionScore'], triggerOutputs()?['body/TechnicalExpertise'], triggerOutputs()?['body/ProcessImprovement'], triggerOutputs()?['body/ValueDelivery']), 4)"
+    },
+    {
+      "name": "Check Health Status",
+      "type": "Condition",
+      "condition": "less(outputs('Calculate_Health_Score'), 7)",
+      "ifYes": [
+        {
+          "name": "Trigger Intervention",
+          "type": "Send Email",
+          "to": "success@company.com",
+          "subject": "\ud83d\udea8 Client Health Alert - Immediate Attention Required"
+        }
+      ]
+    },
+    {
+      "name": "Update SharePoint",
+      "type": "SharePoint - Create Item",
+      "siteUrl": "@{variables('SharePointSite')}",
+      "listName": "Client Success Monitoring"
+    }
+  ]
+}

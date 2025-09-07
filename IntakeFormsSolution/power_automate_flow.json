@@ -1,0 +1,432 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "$connections": {
+        "defaultValue": {},
+        "type": "Object"
+      }
+    },
+    "triggers": {
+      "manual": {
+        "type": "Request",
+        "kind": "Button",
+        "inputs": {
+          "schema": {
+            "type": "object",
+            "properties": {
+              "LibraryName": {
+                "type": "string",
+                "title": "Library Name",
+                "enum": [
+                  "Client_Documents",
+                  "Project_Templates",
+                  "Reports_and_Analytics",
+                  "Training_Materials",
+                  "Business_Operations",
+                  "Marketing_and_Sales",
+                  "Financial_Documents",
+                  "System_Documentation"
+                ]
+              },
+              "SiteUrl": {
+                "type": "string",
+                "title": "SharePoint Site URL",
+                "default": "https://[tenant].sharepoint.com/sites/BusinessOperations"
+              }
+            },
+            "required": [
+              "LibraryName",
+              "SiteUrl"
+            ]
+          }
+        }
+      }
+    },
+    "actions": {
+      "Initialize_Folder_List": {
+        "type": "InitializeVariable",
+        "inputs": {
+          "variables": [
+            {
+              "name": "FolderList",
+              "type": "array",
+              "value": []
+            }
+          ]
+        }
+      },
+      "Switch_Library_Type": {
+        "type": "Switch",
+        "expression": "@triggerBody()['LibraryName']",
+        "cases": {
+          "Client_Documents": {
+            "case": "Client_Documents",
+            "actions": {
+              "Set_Folders_for_Client_Documents": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Client_001_CompanyName/01_Contracts_and_Agreements",
+                    "Client_001_CompanyName/02_Project_Deliverables",
+                    "Client_001_CompanyName/03_Meeting_Notes",
+                    "Client_001_CompanyName/04_Correspondence",
+                    "Client_001_CompanyName/05_Reports_and_Analytics",
+                    "Client_001_CompanyName/06_Archive",
+                    "Client_002_CompanyName/01_Contracts_and_Agreements",
+                    "Client_002_CompanyName/02_Project_Deliverables",
+                    "Client_002_CompanyName/03_Meeting_Notes",
+                    "Client_002_CompanyName/04_Correspondence"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Client_Documents": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Client_Documents": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Client_Documents",
+                        "folderPath": "@items('Apply_to_each_folder_Client_Documents')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Project_Templates": {
+            "case": "Project_Templates",
+            "actions": {
+              "Set_Folders_for_Project_Templates": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Proposal_Templates/Standard_Proposals/Data_Analytics",
+                    "Proposal_Templates/Standard_Proposals/Business_Intelligence",
+                    "Proposal_Templates/Standard_Proposals/Process_Automation",
+                    "Proposal_Templates/Custom_Proposals/Enterprise_Solutions",
+                    "Proposal_Templates/Custom_Proposals/SMB_Solutions",
+                    "Proposal_Templates/RFP_Responses/Government",
+                    "Proposal_Templates/RFP_Responses/Private_Sector",
+                    "Contract_Templates/Service_Agreements/Standard_MSA",
+                    "Contract_Templates/Service_Agreements/Enterprise_MSA",
+                    "Contract_Templates/NDAs/Standard_NDA"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Project_Templates": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Project_Templates": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Project_Templates",
+                        "folderPath": "@items('Apply_to_each_folder_Project_Templates')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Reports_and_Analytics": {
+            "case": "Reports_and_Analytics",
+            "actions": {
+              "Set_Folders_for_Reports_and_Analytics": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Daily_Reports/Automated_Reports/System_Performance",
+                    "Daily_Reports/Automated_Reports/Client_Activity",
+                    "Daily_Reports/Automated_Reports/Team_Productivity",
+                    "Daily_Reports/Manual_Reports/Exception_Reports",
+                    "Daily_Reports/Manual_Reports/Custom_Analysis",
+                    "Weekly_Reports/Executive_Summary/Business_Performance",
+                    "Weekly_Reports/Executive_Summary/Financial_Summary",
+                    "Weekly_Reports/Executive_Summary/Client_Health",
+                    "Weekly_Reports/Operational_Reports/Project_Status",
+                    "Weekly_Reports/Operational_Reports/Resource_Utilization"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Reports_and_Analytics": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Reports_and_Analytics": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Reports_and_Analytics",
+                        "folderPath": "@items('Apply_to_each_folder_Reports_and_Analytics')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Training_Materials": {
+            "case": "Training_Materials",
+            "actions": {
+              "Set_Folders_for_Training_Materials": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "User_Guides/Microsoft_365/Excel_Automation",
+                    "User_Guides/Microsoft_365/Power_Automate",
+                    "User_Guides/Microsoft_365/Power_BI",
+                    "User_Guides/Microsoft_365/SharePoint",
+                    "User_Guides/Microsoft_365/Teams_Collaboration",
+                    "User_Guides/Business_Processes/Client_Onboarding",
+                    "User_Guides/Business_Processes/Project_Management",
+                    "User_Guides/Business_Processes/Quality_Assurance",
+                    "User_Guides/Business_Processes/Reporting_Procedures",
+                    "Video_Tutorials/Getting_Started/New_Employee_Orientation"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Training_Materials": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Training_Materials": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Training_Materials",
+                        "folderPath": "@items('Apply_to_each_folder_Training_Materials')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Business_Operations": {
+            "case": "Business_Operations",
+            "actions": {
+              "Set_Folders_for_Business_Operations": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Policies_and_Procedures/HR_Policies/Employee_Handbook",
+                    "Policies_and_Procedures/HR_Policies/Code_of_Conduct",
+                    "Policies_and_Procedures/HR_Policies/Performance_Management",
+                    "Policies_and_Procedures/IT_Policies/Security_Policies",
+                    "Policies_and_Procedures/IT_Policies/Data_Protection",
+                    "Policies_and_Procedures/IT_Policies/Acceptable_Use",
+                    "Policies_and_Procedures/Business_Policies/Client_Engagement",
+                    "Policies_and_Procedures/Business_Policies/Financial_Management",
+                    "Standard_Operating_Procedures/Client_Onboarding/New_Client_Setup",
+                    "Standard_Operating_Procedures/Client_Onboarding/Contract_Processing"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Business_Operations": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Business_Operations": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Business_Operations",
+                        "folderPath": "@items('Apply_to_each_folder_Business_Operations')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Marketing_and_Sales": {
+            "case": "Marketing_and_Sales",
+            "actions": {
+              "Set_Folders_for_Marketing_and_Sales": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Marketing_Materials/Brochures_and_Flyers/Service_Brochures",
+                    "Marketing_Materials/Brochures_and_Flyers/Company_Overview",
+                    "Marketing_Materials/Digital_Assets/Website_Content",
+                    "Marketing_Materials/Digital_Assets/Social_Media_Content",
+                    "Marketing_Materials/Digital_Assets/Email_Templates",
+                    "Marketing_Materials/Presentations/Company_Presentations",
+                    "Marketing_Materials/Presentations/Service_Presentations",
+                    "Marketing_Materials/Videos/Company_Videos",
+                    "Marketing_Materials/Videos/Service_Demonstrations",
+                    "Case_Studies/Client_Success_Stories/Healthcare_Case_Studies"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Marketing_and_Sales": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Marketing_and_Sales": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Marketing_and_Sales",
+                        "folderPath": "@items('Apply_to_each_folder_Marketing_and_Sales')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "Financial_Documents": {
+            "case": "Financial_Documents",
+            "actions": {
+              "Set_Folders_for_Financial_Documents": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Invoices/Client_Invoices/2024/Q1",
+                    "Invoices/Client_Invoices/2024/Q2",
+                    "Invoices/Client_Invoices/2024/Q3",
+                    "Invoices/Client_Invoices/2024/Q4",
+                    "Invoices/Vendor_Invoices/2024/Q1",
+                    "Invoices/Vendor_Invoices/2024/Q2",
+                    "Invoices/Vendor_Invoices/2024/Q3",
+                    "Invoices/Vendor_Invoices/2024/Q4",
+                    "Contracts_Financial/Client_Contracts/Active_Contracts",
+                    "Contracts_Financial/Client_Contracts/Completed_Contracts"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_Financial_Documents": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_Financial_Documents": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "Financial_Documents",
+                        "folderPath": "@items('Apply_to_each_folder_Financial_Documents')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "System_Documentation": {
+            "case": "System_Documentation",
+            "actions": {
+              "Set_Folders_for_System_Documentation": {
+                "type": "SetVariable",
+                "inputs": {
+                  "name": "FolderList",
+                  "value": [
+                    "Technical_Specifications/System_Architecture/Overall_Architecture",
+                    "Technical_Specifications/System_Architecture/Integration_Architecture",
+                    "Technical_Specifications/Database_Design/Data_Models",
+                    "Technical_Specifications/Database_Design/Schema_Documentation",
+                    "Technical_Specifications/API_Documentation/REST_APIs",
+                    "Technical_Specifications/API_Documentation/Integration_APIs",
+                    "Technical_Specifications/Security_Specifications/Security_Architecture",
+                    "Technical_Specifications/Security_Specifications/Access_Controls",
+                    "System_Architecture/Microsoft_365_Architecture/SharePoint_Architecture",
+                    "System_Architecture/Microsoft_365_Architecture/Power_Platform_Architecture"
+                  ]
+                }
+              },
+              "Apply_to_each_folder_System_Documentation": {
+                "type": "Foreach",
+                "foreach": "@variables('FolderList')",
+                "actions": {
+                  "Create_Folder_System_Documentation": {
+                    "type": "ApiConnection",
+                    "inputs": {
+                      "host": {
+                        "connectionName": "sharepointonline",
+                        "operationId": "CreateFolder"
+                      },
+                      "parameters": {
+                        "dataset": "@triggerBody()['SiteUrl']",
+                        "table": "System_Documentation",
+                        "folderPath": "@items('Apply_to_each_folder_System_Documentation')"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "default": {
+          "actions": {
+            "Send_Error_Email": {
+              "type": "ApiConnection",
+              "inputs": {
+                "host": {
+                  "connectionName": "office365",
+                  "operationId": "SendEmailV2"
+                },
+                "parameters": {
+                  "emailMessage": {
+                    "To": "admin@company.com",
+                    "Subject": "SharePoint Folder Creation Error",
+                    "Body": "Invalid library name provided: @{triggerBody()['LibraryName']}"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

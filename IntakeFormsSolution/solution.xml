@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.1.0.643" SolutionPackageVersion="9.1" languagecode="1033" generatedBy="PowerPlatformCLI">
+  <SolutionManifest>
+    <UniqueName>IntakeFormsSolution</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="Intake Forms Automation Solution" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Comprehensive intake forms with SharePoint lists and Power Automate flows" languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.0</Version>
+    <Managed>0</Managed>
+    <Publisher>
+      <UniqueName>ACTLearningSystems</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="ACT Learning Systems" languagecode="1033" />
+      </LocalizedNames>
+    </Publisher>
+  </SolutionManifest>
+</ImportExportXml>

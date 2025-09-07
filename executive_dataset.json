@@ -1,0 +1,215 @@
+{
+  "name": "Executive Performance Dataset",
+  "description": "Comprehensive business performance metrics for executive reporting",
+  "tables": [
+    {
+      "name": "KPIMetrics",
+      "columns": [
+        {
+          "name": "MetricID",
+          "dataType": "string",
+          "isKey": true
+        },
+        {
+          "name": "MetricName",
+          "dataType": "string"
+        },
+        {
+          "name": "CurrentValue",
+          "dataType": "decimal"
+        },
+        {
+          "name": "PreviousValue",
+          "dataType": "decimal"
+        },
+        {
+          "name": "TargetValue",
+          "dataType": "decimal"
+        },
+        {
+          "name": "MetricDate",
+          "dataType": "dateTime"
+        },
+        {
+          "name": "Category",
+          "dataType": "string"
+        },
+        {
+          "name": "Unit",
+          "dataType": "string"
+        },
+        {
+          "name": "TrendDirection",
+          "dataType": "string"
+        },
+        {
+          "name": "PerformanceStatus",
+          "dataType": "string"
+        }
+      ],
+      "measures": [
+        {
+          "name": "Performance Score",
+          "expression": "DIVIDE([CurrentValue], [TargetValue], 0) * 100",
+          "formatString": "0.0\"%\""
+        },
+        {
+          "name": "Period Change",
+          "expression": "DIVIDE([CurrentValue] - [PreviousValue], [PreviousValue], 0) * 100",
+          "formatString": "+0.0\"%\";-0.0\"%\";\"0%\""
+        },
+        {
+          "name": "Variance to Target",
+          "expression": "[CurrentValue] - [TargetValue]",
+          "formatString": "+#,##0;-#,##0;0"
+        }
+      ]
+    },
+    {
+      "name": "RevenueData",
+      "columns": [
+        {
+          "name": "Date",
+          "dataType": "dateTime",
+          "isKey": true
+        },
+        {
+          "name": "Revenue",
+          "dataType": "decimal"
+        },
+        {
+          "name": "ProductLine",
+          "dataType": "string"
+        },
+        {
+          "name": "Region",
+          "dataType": "string"
+        },
+        {
+          "name": "CustomerSegment",
+          "dataType": "string"
+        },
+        {
+          "name": "SalesChannel",
+          "dataType": "string"
+        },
+        {
+          "name": "Quantity",
+          "dataType": "int64"
+        },
+        {
+          "name": "UnitPrice",
+          "dataType": "decimal"
+        },
+        {
+          "name": "Cost",
+          "dataType": "decimal"
+        },
+        {
+          "name": "Profit",
+          "dataType": "decimal"
+        }
+      ],
+      "measures": [
+        {
+          "name": "Total Revenue",
+          "expression": "SUM(RevenueData[Revenue])",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Total Profit",
+          "expression": "SUM(RevenueData[Profit])",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Profit Margin",
+          "expression": "DIVIDE([Total Profit], [Total Revenue], 0)",
+          "formatString": "0.0%"
+        },
+        {
+          "name": "Revenue Growth",
+          "expression": "DIVIDE([Total Revenue] - CALCULATE([Total Revenue], DATEADD('Date'[Date], -1, MONTH)), CALCULATE([Total Revenue], DATEADD('Date'[Date], -1, MONTH)), 0)",
+          "formatString": "+0.0%;-0.0%;0%"
+        }
+      ]
+    },
+    {
+      "name": "CustomerData",
+      "columns": [
+        {
+          "name": "CustomerID",
+          "dataType": "string",
+          "isKey": true
+        },
+        {
+          "name": "CustomerName",
+          "dataType": "string"
+        },
+        {
+          "name": "AcquisitionDate",
+          "dataType": "dateTime"
+        },
+        {
+          "name": "CustomerSegment",
+          "dataType": "string"
+        },
+        {
+          "name": "LifetimeValue",
+          "dataType": "decimal"
+        },
+        {
+          "name": "SatisfactionScore",
+          "dataType": "decimal"
+        },
+        {
+          "name": "ChurnRisk",
+          "dataType": "string"
+        },
+        {
+          "name": "LastPurchaseDate",
+          "dataType": "dateTime"
+        },
+        {
+          "name": "TotalOrders",
+          "dataType": "int64"
+        },
+        {
+          "name": "AverageOrderValue",
+          "dataType": "decimal"
+        }
+      ],
+      "measures": [
+        {
+          "name": "Total Customers",
+          "expression": "DISTINCTCOUNT(CustomerData[CustomerID])",
+          "formatString": "#,##0"
+        },
+        {
+          "name": "Average CLV",
+          "expression": "AVERAGE(CustomerData[LifetimeValue])",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Customer Satisfaction",
+          "expression": "AVERAGE(CustomerData[SatisfactionScore])",
+          "formatString": "0.0"
+        },
+        {
+          "name": "Churn Rate",
+          "expression": "DIVIDE(CALCULATE(DISTINCTCOUNT(CustomerData[CustomerID]), CustomerData[ChurnRisk] = \"High\"), [Total Customers], 0)",
+          "formatString": "0.0%"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "name": "Revenue_Customer",
+      "fromTable": "RevenueData",
+      "fromColumn": "CustomerSegment",
+      "toTable": "CustomerData",
+      "toColumn": "CustomerSegment",
+      "crossFilteringBehavior": "bothDirections"
+    }
+  ]
+}

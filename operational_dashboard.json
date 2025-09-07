@@ -1,0 +1,64 @@
+{
+  "name": "Operational Excellence Dashboard",
+  "description": "Operations performance and efficiency monitoring",
+  "pages": [
+    {
+      "name": "Operations Overview",
+      "displayName": "Operational Performance",
+      "visuals": [
+        {
+          "type": "gauge",
+          "title": "Overall Efficiency",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 220,
+            "height": 200
+          },
+          "dataFields": [
+            "Overall Efficiency"
+          ]
+        },
+        {
+          "type": "gauge",
+          "title": "Quality Index",
+          "position": {
+            "x": 240,
+            "y": 0,
+            "width": 220,
+            "height": 200
+          },
+          "dataFields": [
+            "Quality Index"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Total Throughput",
+          "position": {
+            "x": 480,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "dataFields": [
+            "Total Throughput"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Avg Cycle Time",
+          "position": {
+            "x": 700,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "dataFields": [
+            "Average Cycle Time"
+          ]
+        }
+      ]
+    }
+  ]
+}

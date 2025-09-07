@@ -1,0 +1,54 @@
+{
+  "name": "AI-Powered Lead Qualification",
+  "description": "Automated lead scoring and qualification using Manus AI",
+  "triggers": [
+    "New lead captured",
+    "Website visitor engagement",
+    "Email interaction",
+    "Social media engagement",
+    "Content download"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Lead Data Collection",
+      "manus_prompt": "Analyze lead data including demographics, firmographics, behavior, and engagement history.",
+      "expected_output": "Comprehensive lead profile",
+      "time_estimate": "5 minutes"
+    },
+    {
+      "step": 2,
+      "action": "Lead Scoring",
+      "manus_prompt": "Score lead based on fit, interest, and buying intent. Use predictive analytics for qualification.",
+      "expected_output": "Lead score with qualification status",
+      "time_estimate": "3 minutes"
+    },
+    {
+      "step": 3,
+      "action": "Personalized Outreach",
+      "manus_prompt": "Create personalized outreach message based on lead profile, interests, and pain points.",
+      "expected_output": "Customized outreach message",
+      "time_estimate": "10 minutes"
+    },
+    {
+      "step": 4,
+      "action": "Follow-up Sequence",
+      "manus_prompt": "Design multi-touch follow-up sequence based on lead behavior and engagement patterns.",
+      "expected_output": "Automated follow-up sequence",
+      "time_estimate": "15 minutes"
+    },
+    {
+      "step": 5,
+      "action": "Sales Handoff",
+      "manus_prompt": "Prepare sales handoff package with lead insights, recommended approach, and next steps.",
+      "expected_output": "Sales handoff documentation",
+      "time_estimate": "7 minutes"
+    }
+  ],
+  "total_time": "40 minutes",
+  "automation_level": "90%",
+  "human_review_points": [
+    "High-value lead verification",
+    "Personalization quality check"
+  ]
+}

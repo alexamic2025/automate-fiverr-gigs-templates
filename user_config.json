@@ -1,0 +1,36 @@
+{
+  "seller_name": "Your Full Name",
+  "seller_title": "Your Professional Title | Your Expertise",
+  "company_name": "Your Company Name",
+  "years_experience": "X+",
+  "mba_credential": "Your Degree/Certification",
+  "fortune_500_companies": "Company 1, Company 2",
+  "portfolio_value": "$XXX+",
+  "compliance_improvement": "XX%",
+  "delivery_acceleration": "XX%",
+  "projects_completed": "XXX+",
+  "satisfaction_rate": "XX%",
+  "website_domain": "yourdomain.com",
+  "email_address": "your-email@domain.com",
+  "phone_number": "+1-XXX-XXX-XXXX",
+  "location": "Your City, State",
+  
+  "_instructions": {
+    "seller_name": "Your full name as you want it to appear on Fiverr",
+    "seller_title": "Your professional title and main expertise areas",
+    "company_name": "Your business/company name (can be your name if freelancing)",
+    "years_experience": "Number of years of relevant experience (e.g., '10+', '5+')",
+    "mba_credential": "Your highest relevant degree or certification",
+    "fortune_500_companies": "Previous employers or major clients (if applicable)",
+    "portfolio_value": "Total value of projects managed (if applicable)",
+    "compliance_improvement": "Percentage improvement you've achieved (if applicable)",
+    "delivery_acceleration": "Percentage improvement in delivery speed (if applicable)",
+    "projects_completed": "Total number of projects completed",
+    "satisfaction_rate": "Your client satisfaction rate percentage",
+    "website_domain": "Your business website domain",
+    "email_address": "Your professional email address",
+    "phone_number": "Your business phone number",
+    "location": "Your city and state/country"
+  }
+}
+

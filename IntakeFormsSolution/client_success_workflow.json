@@ -1,0 +1,54 @@
+{
+  "name": "Automated Client Success Management",
+  "description": "AI-driven client success and retention automation",
+  "triggers": [
+    "New client onboarding",
+    "Usage pattern changes",
+    "Satisfaction score updates",
+    "Support ticket creation",
+    "Renewal approaching"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Client Health Assessment",
+      "manus_prompt": "Analyze client health metrics including usage, engagement, satisfaction, and success indicators.",
+      "expected_output": "Client health score and risk assessment",
+      "time_estimate": "10 minutes"
+    },
+    {
+      "step": 2,
+      "action": "Success Plan Development",
+      "manus_prompt": "Create personalized success plan based on client goals, current status, and growth opportunities.",
+      "expected_output": "Customized client success plan",
+      "time_estimate": "20 minutes"
+    },
+    {
+      "step": 3,
+      "action": "Proactive Communication",
+      "manus_prompt": "Generate proactive communication based on client status, achievements, and upcoming opportunities.",
+      "expected_output": "Personalized client communication",
+      "time_estimate": "15 minutes"
+    },
+    {
+      "step": 4,
+      "action": "Upselling Opportunity Identification",
+      "manus_prompt": "Identify upselling and cross-selling opportunities based on client usage and business growth.",
+      "expected_output": "Expansion opportunity recommendations",
+      "time_estimate": "12 minutes"
+    },
+    {
+      "step": 5,
+      "action": "Retention Strategy",
+      "manus_prompt": "Develop retention strategy for at-risk clients including intervention plans and value reinforcement.",
+      "expected_output": "Client retention action plan",
+      "time_estimate": "18 minutes"
+    }
+  ],
+  "total_time": "75 minutes",
+  "automation_level": "85%",
+  "human_review_points": [
+    "High-risk client intervention",
+    "Expansion proposal approval"
+  ]
+}

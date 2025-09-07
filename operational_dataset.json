@@ -1,0 +1,75 @@
+{
+  "name": "Operational Excellence Dataset",
+  "description": "Operations performance and efficiency metrics",
+  "tables": [
+    {
+      "name": "OperationalMetrics",
+      "columns": [
+        {
+          "name": "MetricDate",
+          "dataType": "dateTime",
+          "isKey": true
+        },
+        {
+          "name": "Department",
+          "dataType": "string",
+          "isKey": true
+        },
+        {
+          "name": "ProcessName",
+          "dataType": "string"
+        },
+        {
+          "name": "EfficiencyScore",
+          "dataType": "decimal"
+        },
+        {
+          "name": "QualityScore",
+          "dataType": "decimal"
+        },
+        {
+          "name": "CycleTime",
+          "dataType": "decimal"
+        },
+        {
+          "name": "Throughput",
+          "dataType": "int64"
+        },
+        {
+          "name": "DefectRate",
+          "dataType": "decimal"
+        },
+        {
+          "name": "CustomerSatisfaction",
+          "dataType": "decimal"
+        },
+        {
+          "name": "EmployeeProductivity",
+          "dataType": "decimal"
+        }
+      ],
+      "measures": [
+        {
+          "name": "Overall Efficiency",
+          "expression": "AVERAGE(OperationalMetrics[EfficiencyScore])",
+          "formatString": "0.0%"
+        },
+        {
+          "name": "Quality Index",
+          "expression": "AVERAGE(OperationalMetrics[QualityScore])",
+          "formatString": "0.0"
+        },
+        {
+          "name": "Average Cycle Time",
+          "expression": "AVERAGE(OperationalMetrics[CycleTime])",
+          "formatString": "0.0\" hours\""
+        },
+        {
+          "name": "Total Throughput",
+          "expression": "SUM(OperationalMetrics[Throughput])",
+          "formatString": "#,##0\" units\""
+        }
+      ]
+    }
+  ]
+}

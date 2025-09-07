@@ -1,0 +1,77 @@
+{
+  "name": "Financial Intelligence Dashboard",
+  "description": "Comprehensive financial analysis and reporting dashboard",
+  "pages": [
+    {
+      "name": "Financial Overview",
+      "displayName": "Financial Performance",
+      "visuals": [
+        {
+          "type": "card",
+          "title": "Total Revenue",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 175,
+            "height": 100
+          },
+          "dataFields": [
+            "Total Revenue"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Total Expenses",
+          "position": {
+            "x": 185,
+            "y": 0,
+            "width": 175,
+            "height": 100
+          },
+          "dataFields": [
+            "Total Expenses"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Net Income",
+          "position": {
+            "x": 370,
+            "y": 0,
+            "width": 175,
+            "height": 100
+          },
+          "dataFields": [
+            "Net Income"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Budget Variance",
+          "position": {
+            "x": 555,
+            "y": 0,
+            "width": 175,
+            "height": 100
+          },
+          "dataFields": [
+            "Budget Variance"
+          ]
+        },
+        {
+          "type": "card",
+          "title": "Cash Position",
+          "position": {
+            "x": 740,
+            "y": 0,
+            "width": 175,
+            "height": 100
+          },
+          "dataFields": [
+            "Net Cash Position"
+          ]
+        }
+      ]
+    }
+  ]
+}

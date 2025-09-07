@@ -1,0 +1,122 @@
+{
+  "name": "Financial Intelligence Dataset",
+  "description": "Comprehensive financial metrics and analysis",
+  "tables": [
+    {
+      "name": "FinancialStatements",
+      "columns": [
+        {
+          "name": "StatementDate",
+          "dataType": "dateTime",
+          "isKey": true
+        },
+        {
+          "name": "AccountCategory",
+          "dataType": "string",
+          "isKey": true
+        },
+        {
+          "name": "AccountName",
+          "dataType": "string"
+        },
+        {
+          "name": "Amount",
+          "dataType": "decimal"
+        },
+        {
+          "name": "StatementType",
+          "dataType": "string"
+        },
+        {
+          "name": "Period",
+          "dataType": "string"
+        },
+        {
+          "name": "Budget",
+          "dataType": "decimal"
+        },
+        {
+          "name": "Forecast",
+          "dataType": "decimal"
+        },
+        {
+          "name": "PreviousYear",
+          "dataType": "decimal"
+        }
+      ],
+      "measures": [
+        {
+          "name": "Total Revenue",
+          "expression": "CALCULATE(SUM(FinancialStatements[Amount]), FinancialStatements[AccountCategory] = \"Revenue\")",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Total Expenses",
+          "expression": "CALCULATE(SUM(FinancialStatements[Amount]), FinancialStatements[AccountCategory] = \"Expenses\")",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Net Income",
+          "expression": "[Total Revenue] - [Total Expenses]",
+          "formatString": "\"$\"#,##0;(\"$\"#,##0)"
+        },
+        {
+          "name": "Budget Variance",
+          "expression": "SUM(FinancialStatements[Amount]) - SUM(FinancialStatements[Budget])",
+          "formatString": "\"$\"#,##0;(\"$\"#,##0)"
+        }
+      ]
+    },
+    {
+      "name": "CashFlow",
+      "columns": [
+        {
+          "name": "Date",
+          "dataType": "dateTime",
+          "isKey": true
+        },
+        {
+          "name": "CashInflow",
+          "dataType": "decimal"
+        },
+        {
+          "name": "CashOutflow",
+          "dataType": "decimal"
+        },
+        {
+          "name": "NetCashFlow",
+          "dataType": "decimal"
+        },
+        {
+          "name": "CumulativeCashFlow",
+          "dataType": "decimal"
+        },
+        {
+          "name": "Category",
+          "dataType": "string"
+        },
+        {
+          "name": "Description",
+          "dataType": "string"
+        }
+      ],
+      "measures": [
+        {
+          "name": "Total Cash Inflow",
+          "expression": "SUM(CashFlow[CashInflow])",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Total Cash Outflow",
+          "expression": "SUM(CashFlow[CashOutflow])",
+          "formatString": "\"$\"#,##0"
+        },
+        {
+          "name": "Net Cash Position",
+          "expression": "[Total Cash Inflow] - [Total Cash Outflow]",
+          "formatString": "\"$\"#,##0;(\"$\"#,##0)"
+        }
+      ]
+    }
+  ]
+}

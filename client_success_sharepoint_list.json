@@ -1,0 +1,96 @@
+{
+  "displayName": "Client Success Monitoring",
+  "description": "Ongoing client health and satisfaction tracking",
+  "columns": [
+    {
+      "name": "SubmissionDate",
+      "type": "dateTime",
+      "required": true
+    },
+    {
+      "name": "ClientName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "ProjectName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "SatisfactionScore",
+      "type": "number",
+      "required": true
+    },
+    {
+      "name": "ProjectStatus",
+      "type": "choice",
+      "choices": [
+        "On Track",
+        "At Risk",
+        "Behind",
+        "Complete"
+      ]
+    },
+    {
+      "name": "CommunicationFreq",
+      "type": "choice",
+      "choices": [
+        "Weekly",
+        "Bi-weekly",
+        "Monthly",
+        "Quarterly"
+      ]
+    },
+    {
+      "name": "ResponseTime",
+      "type": "choice",
+      "choices": [
+        "Excellent",
+        "Good",
+        "Average",
+        "Poor"
+      ]
+    },
+    {
+      "name": "TechnicalExpertise",
+      "type": "number",
+      "required": true
+    },
+    {
+      "name": "ProcessImprovement",
+      "type": "number",
+      "required": true
+    },
+    {
+      "name": "ValueDelivery",
+      "type": "number",
+      "required": true
+    },
+    {
+      "name": "OverallHealth",
+      "type": "choice",
+      "choices": [
+        "Excellent",
+        "Good",
+        "At Risk",
+        "Critical"
+      ]
+    },
+    {
+      "name": "RiskFactors",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "ActionItems",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "NextSteps",
+      "type": "text",
+      "required": false
+    }
+  ]
+}

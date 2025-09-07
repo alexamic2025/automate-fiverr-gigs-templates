@@ -1,0 +1,114 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "triggers": {
+      "Recurrence": {
+        "recurrence": {
+          "frequency": "Month",
+          "interval": 1,
+          "startTime": "2024-01-01T09:00:00Z",
+          "timeZone": "UTC"
+        },
+        "type": "Recurrence"
+      }
+    },
+    "actions": {
+      "Get_Client_List": {
+        "runAfter": {},
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": {
+            "connectionName": "shared_excelonlinebusiness",
+            "operationId": "GetTable",
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness"
+          },
+          "parameters": {
+            "source": "me",
+            "drive": "me",
+            "file": "Report Data Hub.xlsx",
+            "table": "ClientDatabase"
+          }
+        }
+      },
+      "Apply_to_each_client": {
+        "foreach": "@body('Get_Client_List')?['value']",
+        "actions": {
+          "Export_Executive_Dashboard": {
+            "runAfter": {},
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_powerbi",
+                "operationId": "ExportReport",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerbi"
+              },
+              "parameters": {
+                "workspace": "My workspace",
+                "report": "Executive Performance Dashboard",
+                "format": "PDF",
+                "filter": "ClientName eq '@{items('Apply_to_each_client')?['Client Name']}'"
+              }
+            }
+          },
+          "Create_Dashboard_Link": {
+            "runAfter": {
+              "Export_Executive_Dashboard": [
+                "Succeeded"
+              ]
+            },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_powerbi",
+                "operationId": "GetReportEmbedUrl",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_powerbi"
+              },
+              "parameters": {
+                "workspace": "My workspace",
+                "report": "Executive Performance Dashboard",
+                "accessLevel": "View"
+              }
+            }
+          },
+          "Send_Dashboard_Email": {
+            "runAfter": {
+              "Create_Dashboard_Link": [
+                "Succeeded"
+              ]
+            },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_office365",
+                "operationId": "SendEmailV2",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+              },
+              "parameters": {
+                "emailMessage": {
+                  "To": "@{items('Apply_to_each_client')?['Email Address']}",
+                  "Subject": "\ud83d\udcca Your Interactive Power BI Dashboard from DataPro Analytics",
+                  "Body": "<html><body style=\"font-family: Segoe UI, Arial, sans-serif;\">\n<div style=\"max-width: 600px; margin: 0 auto; padding: 20px;\">\n    <div style=\"text-align: center; border-bottom: 3px solid #0078D4; padding-bottom: 20px; margin-bottom: 30px;\">\n        <h1 style=\"color: #0078D4; margin: 0;\">DataPro Analytics</h1>\n        <h2 style=\"color: #323130; margin: 10px 0;\">Interactive Power BI Dashboard Ready!</h2>\n    </div>\n    \n    <p style=\"font-size: 16px; color: #323130;\">Dear @{items('Apply_to_each_client')?['Client Name']},</p>\n    \n    <p style=\"font-size: 16px; color: #323130;\">Your interactive Power BI dashboard is now available with the latest business intelligence and analytics!</p>\n    \n    <div style=\"background-color: #F8F9FA; border-left: 4px solid #0078D4; padding: 20px; margin: 20px 0;\">\n        <h3 style=\"color: #0078D4; margin-top: 0;\">\ud83d\ude80 What's New in Your Dashboard:</h3>\n        <ul style=\"color: #323130; font-size: 14px;\">\n            <li><strong>Interactive Visualizations:</strong> Click, drill-down, and explore your data</li>\n            <li><strong>Real-Time Updates:</strong> Always showing your latest business metrics</li>\n            <li><strong>Mobile Optimized:</strong> Access from any device, anywhere</li>\n            <li><strong>AI-Powered Insights:</strong> Intelligent recommendations and predictions</li>\n            <li><strong>Executive Ready:</strong> Professional presentation quality</li>\n        </ul>\n    </div>\n    \n    <div style=\"text-align: center; margin: 30px 0;\">\n        <a href=\"@{body('Create_Dashboard_Link')?['embedUrl']}\" \n           style=\"background-color: #0078D4; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;\">\n            \ud83d\udd17 Access Your Interactive Dashboard\n        </a>\n    </div>\n    \n    <div style=\"background-color: #E3F2FD; border: 1px solid #2196F3; border-radius: 5px; padding: 15px; margin: 20px 0;\">\n        <h4 style=\"color: #1976D2; margin-top: 0;\">\ud83d\udca1 Pro Tips for Maximum Value:</h4>\n        <ul style=\"color: #323130; font-size: 14px; margin-bottom: 0;\">\n            <li>Use filters to focus on specific time periods or segments</li>\n            <li>Click on charts to drill down into detailed data</li>\n            <li>Access from your mobile device for on-the-go insights</li>\n            <li>Share specific views with your team using the share button</li>\n        </ul>\n    </div>\n    \n    <p style=\"font-size: 16px; color: #323130;\">A PDF snapshot of your dashboard is also attached for easy sharing and offline reference.</p>\n    \n    <p style=\"font-size: 16px; color: #323130;\">Questions about your dashboard or need additional analysis? I'm here to help!</p>\n    \n    <div style=\"border-top: 2px solid #E9ECEF; margin-top: 40px; padding-top: 20px; text-align: center;\">\n        <p style=\"color: #605E5C; font-size: 14px; margin: 5px 0;\"><strong>Alex Johnson</strong></p>\n        <p style=\"color: #605E5C; font-size: 14px; margin: 5px 0;\">DataPro Analytics</p>\n        <p style=\"color: #605E5C; font-size: 14px; margin: 5px 0;\">alex@dataproanalytics.com | +1-555-DATA-PRO</p>\n        <p style=\"color: #605E5C; font-size: 14px; margin: 5px 0;\">www.dataproanalytics.com</p>\n        <p style=\"color: #8A8886; font-size: 12px; margin-top: 15px;\"><em>Powered by Microsoft Power BI & Power Automate</em></p>\n    </div>\n</div>\n</body></html>",
+                  "Attachments": [
+                    {
+                      "Name": "@{items('Apply_to_each_client')?['Client Name']} - Power BI Dashboard - @{formatDateTime(utcNow(), 'yyyy-MM-dd')}.pdf",
+                      "ContentBytes": "@{body('Export_Executive_Dashboard')}"
+                    }
+                  ],
+                  "Importance": "High"
+                }
+              }
+            }
+          }
+        },
+        "runAfter": {
+          "Get_Client_List": [
+            "Succeeded"
+          ]
+        },
+        "type": "Foreach"
+      }
+    }
+  }
+}

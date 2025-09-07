@@ -1,0 +1,79 @@
+{
+  "properties": {
+    "displayName": "Automated Reporting Pipeline",
+    "description": "Comprehensive automated reporting system with data aggregation and distribution",
+    "state": "Started",
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {},
+      "triggers": {
+        "Recurrence": {
+          "type": "Recurrence",
+          "recurrence": {
+            "frequency": "Month",
+            "interval": 1,
+            "schedule": {
+              "hours": [8],
+              "minutes": [0],
+              "monthDays": [1]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_Financial_Data": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['sql']['connectionId']"
+              }
+            },
+            "method": "post",
+            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('default'))}/query/sql",
+            "body": {
+              "query": "SELECT SUM(Revenue) as TotalRevenue, AVG(ProjectValue) as AvgProjectValue, COUNT(*) as ProjectCount FROM Projects WHERE MONTH(CompletedDate) = MONTH(GETDATE()) - 1"
+            }
+          }
+        },
+        "Get_Client_Metrics": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['sharepoint']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://yourorg.sharepoint.com/sites/ClientData'))}/tables/@{encodeURIComponent(encodeURIComponent('ClientMetrics'))}/items"
+          }
+        },
+        "Generate_Report_HTML": {
+          "type": "Compose",
+          "inputs": {
+            "Body": "<html><head><style>body{font-family:Arial,sans-serif;margin:20px;}.header{background-color:#2E86AB;color:white;padding:20px;text-align:center;border-radius:8px;}.metric-card{background:#f8f9fa;padding:15px;margin:10px 0;border-left:4px solid #2E86AB;}.chart{width:100%;height:300px;background:#fff;border:1px solid #ddd;margin:20px 0;}</style></head><body><div class='header'><h1>Monthly Business Report</h1><p>@{formatDateTime(utcnow(), 'MMMM yyyy')}</p></div><div class='metric-card'><h3>Financial Performance</h3><p><strong>Total Revenue:</strong> $@{body('Get_Financial_Data')?['resultsets'][0]['Table1'][0]['TotalRevenue']}</p><p><strong>Average Project Value:</strong> $@{body('Get_Financial_Data')?['resultsets'][0]['Table1'][0]['AvgProjectValue']}</p><p><strong>Projects Completed:</strong> @{body('Get_Financial_Data')?['resultsets'][0]['Table1'][0]['ProjectCount']}</p></div><div class='metric-card'><h3>Client Satisfaction</h3><p><strong>Average Satisfaction Score:</strong> @{div(add(add(add(body('Get_Client_Metrics')?['value'][0]['SatisfactionScore'], body('Get_Client_Metrics')?['value'][1]['SatisfactionScore']), body('Get_Client_Metrics')?['value'][2]['SatisfactionScore']), body('Get_Client_Metrics')?['value'][3]['SatisfactionScore']), 4)}/10</p></div></body></html>"
+          }
+        },
+        "Send_Monthly_Report": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['outlook']['connectionId']"
+              }
+            },
+            "method": "post",
+            "path": "/v2/Mail",
+            "body": {
+              "To": "executives@company.com;management@company.com",
+              "Subject": "📊 Monthly Business Report - @{formatDateTime(utcnow(), 'MMMM yyyy')}",
+              "Body": "@{outputs('Generate_Report_HTML')}",
+              "Importance": "High"
+            }
+          }
+        }
+      }
+    }
+  }
+}

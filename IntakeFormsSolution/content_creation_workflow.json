@@ -1,0 +1,55 @@
+{
+  "name": "Content Creation Automation",
+  "description": "Automated content creation using Manus AI",
+  "triggers": [
+    "New blog post request",
+    "Social media content needed",
+    "Email campaign content required",
+    "Case study development",
+    "White paper creation"
+  ],
+  "steps": [
+    {
+      "step": 1,
+      "action": "Topic Research and Analysis",
+      "manus_prompt": "Research and analyze trending topics in Power BI and business intelligence. Identify content gaps and opportunities.",
+      "expected_output": "Topic analysis report with recommendations",
+      "time_estimate": "15 minutes"
+    },
+    {
+      "step": 2,
+      "action": "Content Outline Creation",
+      "manus_prompt": "Create detailed content outline for [TOPIC] targeting [AUDIENCE] with [GOAL]. Include SEO keywords and structure.",
+      "expected_output": "Detailed content outline with SEO optimization",
+      "time_estimate": "20 minutes"
+    },
+    {
+      "step": 3,
+      "action": "Content Generation",
+      "manus_prompt": "Write comprehensive [CONTENT_TYPE] based on outline. Ensure engaging, informative, and SEO-optimized content.",
+      "expected_output": "Complete content draft ready for review",
+      "time_estimate": "45 minutes"
+    },
+    {
+      "step": 4,
+      "action": "Content Optimization",
+      "manus_prompt": "Optimize content for SEO, readability, and engagement. Add meta descriptions, headers, and call-to-actions.",
+      "expected_output": "Optimized content ready for publication",
+      "time_estimate": "15 minutes"
+    },
+    {
+      "step": 5,
+      "action": "Distribution Strategy",
+      "manus_prompt": "Create distribution strategy for content across multiple channels. Include social media, email, and partnership opportunities.",
+      "expected_output": "Multi-channel distribution plan",
+      "time_estimate": "10 minutes"
+    }
+  ],
+  "total_time": "105 minutes",
+  "automation_level": "95%",
+  "human_review_points": [
+    "Content approval",
+    "Brand alignment check",
+    "Legal compliance review"
+  ]
+}

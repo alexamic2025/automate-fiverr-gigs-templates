@@ -1,0 +1,33 @@
+{
+  "tenant_id": "75db62a2-c72e-453b-ac8b-5deda95159e9",
+  "client_id": "acc2972d-b762-495d-b7a8-5743fd5f6486",
+  "client_secret": "Mbq8Q~rTm32W_amwcB.JDY21f8BPO8LX~WdR8bXY",
+  "environment_url": "https://make.powerautomate.com",
+  "forms_config": {
+    "lead_qualification": {
+      "name": "Lead Qualification Intake Form",
+      "description": "Initial lead assessment and qualification",
+      "auto_scoring": true,
+      "alert_threshold": 25
+    },
+    "project_discovery": {
+      "name": "Project Discovery & Requirements Form",
+      "description": "Detailed project scoping and requirements gathering",
+      "auto_scoring": false,
+      "requires_follow_up": true
+    },
+    "technical_assessment": {
+      "name": "Technical Assessment Form",
+      "description": "In-depth technical infrastructure evaluation",
+      "auto_scoring": false,
+      "requires_technical_review": true
+    },
+    "client_success": {
+      "name": "Client Success Monitoring Form",
+      "description": "Ongoing client health and satisfaction tracking",
+      "auto_scoring": true,
+      "alert_threshold": 7,
+      "frequency": "monthly"
+    }
+  }
+}

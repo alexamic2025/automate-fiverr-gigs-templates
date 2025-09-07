@@ -1,0 +1,111 @@
+{
+  "properties": {
+    "displayName": "Lead Qualification Automation",
+    "description": "Advanced lead scoring and qualification system with intelligent routing",
+    "state": "Started",
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {},
+      "triggers": {
+        "When_a_new_response_is_submitted": {
+          "type": "ApiConnectionWebhook",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['forms']['connectionId']"
+              }
+            },
+            "path": "/formapi/api/forms/@{encodeURIComponent('YOUR_FORM_ID')}/webhooks"
+          }
+        }
+      },
+      "actions": {
+        "Initialize_LeadScore": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "LeadScore",
+                "type": "integer",
+                "value": 0
+              }
+            ]
+          }
+        },
+        "Budget_Range_Scoring": {
+          "type": "Switch",
+          "expression": "@triggerOutputs()?['body/budget_range']",
+          "cases": {
+            "High_Budget": {
+              "case": "$50,000+",
+              "actions": {
+                "Add_25_Points": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "LeadScore",
+                    "value": 25
+                  }
+                }
+              }
+            },
+            "Medium_High_Budget": {
+              "case": "$25,000-$49,999",
+              "actions": {
+                "Add_20_Points": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "LeadScore",
+                    "value": 20
+                  }
+                }
+              }
+            },
+            "Medium_Budget": {
+              "case": "$10,000-$24,999",
+              "actions": {
+                "Add_15_Points": {
+                  "type": "IncrementVariable",
+                  "inputs": {
+                    "name": "LeadScore",
+                    "value": 15
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Send_High_Priority_Email": {
+          "type": "Condition",
+          "expression": {
+            "greater": [
+              "@variables('LeadScore')",
+              20
+            ]
+          },
+          "actions": {
+            "Yes": {
+              "Send_High_Priority_Notification": {
+                "type": "ApiConnection",
+                "inputs": {
+                  "host": {
+                    "connection": {
+                      "name": "@parameters('$connections')['outlook']['connectionId']"
+                    }
+                  },
+                  "method": "post",
+                  "path": "/v2/Mail",
+                  "body": {
+                    "To": "sales@company.com",
+                    "Subject": "🔥 High Priority Lead - Immediate Action Required",
+                    "Body": "A high-value lead has been identified with a score of @{variables('LeadScore')}. Please contact immediately."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

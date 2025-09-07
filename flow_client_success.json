@@ -1,0 +1,125 @@
+{
+  "properties": {
+    "displayName": "Client Success Monitoring",
+    "description": "Automated client health monitoring with proactive intervention",
+    "state": "Started",
+    "definition": {
+      "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+      "contentVersion": "1.0.0.0",
+      "parameters": {},
+      "triggers": {
+        "Recurrence": {
+          "type": "Recurrence",
+          "recurrence": {
+            "frequency": "Week",
+            "interval": 1,
+            "schedule": {
+              "hours": [9],
+              "minutes": [0],
+              "weekDays": ["Monday"]
+            }
+          }
+        }
+      },
+      "actions": {
+        "Get_Client_Data": {
+          "type": "ApiConnection",
+          "inputs": {
+            "host": {
+              "connection": {
+                "name": "@parameters('$connections')['sharepoint']['connectionId']"
+              }
+            },
+            "method": "get",
+            "path": "/datasets/@{encodeURIComponent(encodeURIComponent('https://yourorg.sharepoint.com/sites/ClientData'))}/tables/@{encodeURIComponent(encodeURIComponent('Clients'))}/items"
+          }
+        },
+        "Initialize_AtRiskClients": {
+          "type": "InitializeVariable",
+          "inputs": {
+            "variables": [
+              {
+                "name": "AtRiskClients",
+                "type": "array",
+                "value": []
+              }
+            ]
+          }
+        },
+        "Apply_to_Each_Client": {
+          "type": "Foreach",
+          "foreach": "@body('Get_Client_Data')?['value']",
+          "actions": {
+            "Check_Client_Health": {
+              "type": "Condition",
+              "expression": {
+                "or": [
+                  {
+                    "less": [
+                      "@item()?['LastContact']",
+                      "@addDays(utcnow(), -30)"
+                    ]
+                  },
+                  {
+                    "less": [
+                      "@item()?['SatisfactionScore']",
+                      7
+                    ]
+                  },
+                  {
+                    "equals": [
+                      "@item()?['ProjectStatus']",
+                      "Delayed"
+                    ]
+                  }
+                ]
+              },
+              "actions": {
+                "Yes": {
+                  "Add_to_AtRisk_List": {
+                    "type": "AppendToArrayVariable",
+                    "inputs": {
+                      "name": "AtRiskClients",
+                      "value": "@item()"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Send_Alert_if_AtRisk_Clients": {
+          "type": "Condition",
+          "expression": {
+            "greater": [
+              "@length(variables('AtRiskClients'))",
+              0
+            ]
+          },
+          "actions": {
+            "Yes": {
+              "Send_Alert_Email": {
+                "type": "ApiConnection",
+                "inputs": {
+                  "host": {
+                    "connection": {
+                      "name": "@parameters('$connections')['outlook']['connectionId']"
+                    }
+                  },
+                  "method": "post",
+                  "path": "/v2/Mail",
+                  "body": {
+                    "To": "clientsuccess@company.com",
+                    "Subject": "⚠️ Client Health Alert - @{length(variables('AtRiskClients'))} At-Risk Clients Detected",
+                    "Body": "<h2>Client Success Monitoring Report</h2><p><strong>Date:</strong> @{formatDateTime(utcnow(), 'yyyy-MM-dd')}</p><p><strong>At-Risk Clients Detected:</strong> @{length(variables('AtRiskClients'))}</p>",
+                    "Importance": "High"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

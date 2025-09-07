@@ -1,0 +1,67 @@
+{
+  "displayName": "Lead Qualification Automation",
+  "description": "Processes lead qualification forms with automated scoring and routing",
+  "triggerType": "Microsoft Forms - When a new response is submitted",
+  "actions": [
+    {
+      "name": "Calculate Lead Score",
+      "type": "Compose",
+      "description": "Calculate lead score based on responses",
+      "formula": "add(if(equals(triggerOutputs()?['body/Budget'], 'Over $100k'), 10, if(equals(triggerOutputs()?['body/Budget'], '$50k-$100k'), 7, if(equals(triggerOutputs()?['body/Budget'], '$10k-$50k'), 5, 2))), if(equals(triggerOutputs()?['body/Timeline'], 'ASAP'), 8, if(equals(triggerOutputs()?['body/Timeline'], '1-3 months'), 6, if(equals(triggerOutputs()?['body/Timeline'], '3-6 months'), 4, 2))), if(equals(triggerOutputs()?['body/DecisionMaker'], 'Yes'), 10, if(equals(triggerOutputs()?['body/DecisionMaker'], 'Influencer'), 5, 0)))"
+    },
+    {
+      "name": "Determine Priority",
+      "type": "Condition",
+      "condition": "greater(outputs('Calculate_Lead_Score'), 25)",
+      "ifYes": [
+        {
+          "name": "Set High Priority",
+          "type": "Compose",
+          "value": "High"
+        },
+        {
+          "name": "Send High Priority Alert",
+          "type": "Send Email",
+          "to": "sales@company.com",
+          "subject": "\ud83d\udea8 High Priority Lead Alert",
+          "body": "New high-priority lead scored @{outputs('Calculate_Lead_Score')} points"
+        }
+      ],
+      "ifNo": [
+        {
+          "name": "Set Normal Priority",
+          "type": "Compose",
+          "value": "Medium"
+        }
+      ]
+    },
+    {
+      "name": "Create SharePoint Item",
+      "type": "SharePoint - Create Item",
+      "siteUrl": "@{variables('SharePointSite')}",
+      "listName": "Lead Qualification Intake",
+      "fields": {
+        "ContactName": "@{triggerOutputs()?['body/ContactName']}",
+        "CompanyName": "@{triggerOutputs()?['body/CompanyName']}",
+        "Email": "@{triggerOutputs()?['body/Email']}",
+        "Phone": "@{triggerOutputs()?['body/Phone']}",
+        "ProjectType": "@{triggerOutputs()?['body/ProjectType']}",
+        "BudgetRange": "@{triggerOutputs()?['body/Budget']}",
+        "Timeline": "@{triggerOutputs()?['body/Timeline']}",
+        "LeadScore": "@{outputs('Calculate_Lead_Score')}",
+        "Priority": "@{if(greater(outputs('Calculate_Lead_Score'), 25), 'High', 'Medium')}",
+        "Status": "New"
+      }
+    },
+    {
+      "name": "Send Confirmation Email",
+      "type": "Send Email",
+      "to": "@{triggerOutputs()?['body/Email']}",
+      "subject": "Thank you for your interest - Next Steps",
+      "body": "Thank you for submitting your project details. We'll be in touch within 24 hours."
+    }
+  ],
+  "variables": {
+    "SharePointSite": "https://actlearningsystems.sharepoint.com/sites/PowerAutomate"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "displayName": "Project Discovery Processing",
+  "description": "Processes detailed project discovery forms",
+  "triggerType": "Microsoft Forms - When a new response is submitted",
+  "actions": [
+    {
+      "name": "Assess Technical Complexity",
+      "type": "Switch",
+      "expression": "@triggerOutputs()?['body/TechnicalComplexity']",
+      "cases": {
+        "High": [
+          {
+            "name": "Flag for Technical Review",
+            "type": "Compose",
+            "value": "Technical review required"
+          }
+        ],
+        "Very High": [
+          {
+            "name": "Flag for Architecture Review",
+            "type": "Compose",
+            "value": "Solution architecture review required"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Create SharePoint Item",
+      "type": "SharePoint - Create Item",
+      "siteUrl": "@{variables('SharePointSite')}",
+      "listName": "Project Discovery Requirements"
+    },
+    {
+      "name": "Create Teams Notification",
+      "type": "Teams - Post Message",
+      "message": "New project discovery submitted for @{triggerOutputs()?['body/ClientName']}"
+    }
+  ]
+}

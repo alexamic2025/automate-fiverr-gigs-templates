@@ -1,0 +1,302 @@
+{
+  "name": "Executive Performance Dashboard",
+  "description": "Comprehensive executive-level business performance dashboard",
+  "pages": [
+    {
+      "name": "Executive Overview",
+      "displayName": "Executive Overview",
+      "visuals": [
+        {
+          "type": "card",
+          "title": "Total Revenue",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "dataFields": [
+            "Total Revenue"
+          ],
+          "formatting": {
+            "fontSize": 32,
+            "fontColor": "#0078D4",
+            "backgroundColor": "#F8F9FA",
+            "displayUnits": "thousands"
+          }
+        },
+        {
+          "type": "card",
+          "title": "Net Profit",
+          "position": {
+            "x": 220,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "dataFields": [
+            "Total Profit"
+          ],
+          "formatting": {
+            "fontSize": 32,
+            "fontColor": "#107C10",
+            "backgroundColor": "#F8F9FA",
+            "displayUnits": "thousands"
+          }
+        },
+        {
+          "type": "card",
+          "title": "Profit Margin",
+          "position": {
+            "x": 440,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "dataFields": [
+            "Profit Margin"
+          ],
+          "formatting": {
+            "fontSize": 32,
+            "fontColor": "#8764B8",
+            "backgroundColor": "#F8F9FA",
+            "displayUnits": "percentage"
+          }
+        },
+        {
+          "type": "card",
+          "title": "Customer Satisfaction",
+          "position": {
+            "x": 660,
+            "y": 0,
+            "width": 200,
+            "height": 100
+          },
+          "dataFields": [
+            "Customer Satisfaction"
+          ],
+          "formatting": {
+            "fontSize": 32,
+            "fontColor": "#FF8C00",
+            "backgroundColor": "#F8F9FA",
+            "displayUnits": "none"
+          }
+        },
+        {
+          "type": "lineChart",
+          "title": "Revenue Trend (12 Months)",
+          "position": {
+            "x": 0,
+            "y": 120,
+            "width": 420,
+            "height": 300
+          },
+          "dataFields": {
+            "axis": [
+              "Date"
+            ],
+            "values": [
+              "Total Revenue"
+            ],
+            "legend": [
+              "ProductLine"
+            ]
+          },
+          "formatting": {
+            "lineColor": "#0078D4",
+            "showDataLabels": true,
+            "showTrendLine": true
+          }
+        },
+        {
+          "type": "columnChart",
+          "title": "Revenue by Product Line",
+          "position": {
+            "x": 440,
+            "y": 120,
+            "width": 420,
+            "height": 300
+          },
+          "dataFields": {
+            "axis": [
+              "ProductLine"
+            ],
+            "values": [
+              "Total Revenue",
+              "Total Profit"
+            ]
+          },
+          "formatting": {
+            "colors": [
+              "#0078D4",
+              "#107C10"
+            ],
+            "showDataLabels": true
+          }
+        },
+        {
+          "type": "gauge",
+          "title": "Performance Score",
+          "position": {
+            "x": 0,
+            "y": 440,
+            "width": 280,
+            "height": 200
+          },
+          "dataFields": [
+            "Performance Score"
+          ],
+          "formatting": {
+            "min": 0,
+            "max": 150,
+            "target": 100,
+            "colors": {
+              "good": "#107C10",
+              "warning": "#FF8C00",
+              "bad": "#D13438"
+            }
+          }
+        },
+        {
+          "type": "donutChart",
+          "title": "Customer Segments",
+          "position": {
+            "x": 300,
+            "y": 440,
+            "width": 280,
+            "height": 200
+          },
+          "dataFields": {
+            "legend": [
+              "CustomerSegment"
+            ],
+            "values": [
+              "Total Customers"
+            ]
+          },
+          "formatting": {
+            "colors": [
+              "#0078D4",
+              "#40E0D0",
+              "#8764B8",
+              "#FF8C00"
+            ]
+          }
+        },
+        {
+          "type": "map",
+          "title": "Revenue by Region",
+          "position": {
+            "x": 600,
+            "y": 440,
+            "width": 280,
+            "height": 200
+          },
+          "dataFields": {
+            "location": [
+              "Region"
+            ],
+            "size": [
+              "Total Revenue"
+            ],
+            "color": [
+              "Profit Margin"
+            ]
+          },
+          "formatting": {
+            "mapStyle": "road",
+            "bubbleSize": "medium"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Financial Analysis",
+      "displayName": "Financial Deep Dive",
+      "visuals": [
+        {
+          "type": "waterfallChart",
+          "title": "Revenue Breakdown",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 430,
+            "height": 300
+          },
+          "dataFields": {
+            "category": [
+              "ProductLine"
+            ],
+            "values": [
+              "Total Revenue"
+            ]
+          }
+        },
+        {
+          "type": "lineChart",
+          "title": "Cash Flow Trend",
+          "position": {
+            "x": 450,
+            "y": 0,
+            "width": 430,
+            "height": 300
+          },
+          "dataFields": {
+            "axis": [
+              "Date"
+            ],
+            "values": [
+              "Net Cash Position",
+              "Cumulative Cash Flow"
+            ]
+          }
+        },
+        {
+          "type": "matrix",
+          "title": "Financial Summary",
+          "position": {
+            "x": 0,
+            "y": 320,
+            "width": 880,
+            "height": 300
+          },
+          "dataFields": {
+            "rows": [
+              "AccountCategory",
+              "AccountName"
+            ],
+            "values": [
+              "Amount",
+              "Budget",
+              "Budget Variance"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "field": "Date",
+      "type": "dateRange",
+      "defaultValue": "last12months"
+    },
+    {
+      "field": "Region",
+      "type": "multiSelect",
+      "defaultValue": "all"
+    },
+    {
+      "field": "ProductLine",
+      "type": "multiSelect",
+      "defaultValue": "all"
+    }
+  ],
+  "theme": {
+    "primaryColor": "#0078D4",
+    "secondaryColor": "#40E0D0",
+    "backgroundColor": "#FFFFFF",
+    "textColor": "#323130",
+    "fontFamily": "Segoe UI"
+  }
+}

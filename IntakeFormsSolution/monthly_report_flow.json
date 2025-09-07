@@ -1,0 +1,168 @@
+{
+  "definition": {
+    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "triggers": {
+      "Recurrence": {
+        "recurrence": {
+          "frequency": "Month",
+          "interval": 1,
+          "startTime": "2024-01-01T09:00:00Z",
+          "timeZone": "UTC"
+        },
+        "type": "Recurrence"
+      }
+    },
+    "actions": {
+      "Get_Client_Data": {
+        "runAfter": {},
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": {
+            "connectionName": "shared_excelonlinebusiness",
+            "operationId": "GetTable",
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness"
+          },
+          "parameters": {
+            "source": "me",
+            "drive": "me",
+            "file": "Report Data Hub.xlsx",
+            "table": "ClientDatabase"
+          }
+        }
+      },
+      "Apply_to_each_client": {
+        "foreach": "@body('Get_Client_Data')?['value']",
+        "actions": {
+          "Generate_AI_Insights": {
+            "runAfter": {},
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_aibuilder",
+                "operationId": "PredictText",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_aibuilder"
+              },
+              "parameters": {
+                "text": "Generate executive summary for client @{items('Apply_to_each_client')?['Client Name']} with revenue @{items('Apply_to_each_client')?['Total Revenue']} and @{items('Apply_to_each_client')?['Project Count']} projects"
+              }
+            }
+          },
+          "Create_Word_Document": {
+            "runAfter": {
+              "Generate_AI_Insights": [
+                "Succeeded"
+              ]
+            },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_wordonlinebusiness",
+                "operationId": "CreateDocument",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_wordonlinebusiness"
+              },
+              "parameters": {
+                "source": "me",
+                "drive": "me",
+                "folderPath": "/Client Reports",
+                "name": "@{items('Apply_to_each_client')?['Client Name']} - Monthly Report - @{formatDateTime(utcNow(), 'yyyy-MM-dd')}.docx",
+                "templateId": "Monthly Report Template"
+              }
+            }
+          },
+          "Send_Report_Email": {
+            "runAfter": {
+              "Create_Word_Document": [
+                "Succeeded"
+              ]
+            },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_office365",
+                "operationId": "SendEmailV2",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_office365"
+              },
+              "parameters": {
+                "emailMessage": {
+                  "To": "@{items('Apply_to_each_client')?['Email Address']}",
+                  "Subject": "Your Monthly Performance Report from DataPro Analytics",
+                  "Body": "<html><body>\n<h2>Your Monthly Performance Report is Ready!</h2>\n<p>Dear @{items('Apply_to_each_client')?['Client Name']},</p>\n<p>I'm pleased to deliver your automated monthly performance report, generated using advanced AI and business intelligence.</p>\n<p><strong>Report Highlights:</strong></p>\n<ul>\n<li>Comprehensive performance analysis</li>\n<li>AI-powered insights and recommendations</li>\n<li>Professional charts and visualizations</li>\n<li>Strategic action items for growth</li>\n</ul>\n<p>This report was generated automatically using enterprise-grade Microsoft Power Automate technology, ensuring accuracy, consistency, and timely delivery.</p>\n<p>Please review the attached report and let me know if you have any questions or would like to discuss the findings.</p>\n<p>Best regards,<br>\nAlex Johnson<br>\nDataPro Analytics<br>\nalex@dataproanalytics.com<br>\n+1-555-DATA-PRO</p>\n<p><em>This email and report were generated automatically by our advanced business intelligence system.</em></p>\n</body></html>",
+                  "Attachments": [
+                    {
+                      "Name": "@{outputs('Create_Word_Document')?['body/name']}",
+                      "ContentBytes": "@{outputs('Create_Word_Document')?['body/content']}"
+                    }
+                  ],
+                  "Importance": "High"
+                }
+              }
+            }
+          },
+          "Log_Report_Generation": {
+            "runAfter": {
+              "Send_Report_Email": [
+                "Succeeded"
+              ]
+            },
+            "type": "OpenApiConnection",
+            "inputs": {
+              "host": {
+                "connectionName": "shared_excelonlinebusiness",
+                "operationId": "AddRowToTable",
+                "apiId": "/providers/Microsoft.PowerApps/apis/shared_excelonlinebusiness"
+              },
+              "parameters": {
+                "source": "me",
+                "drive": "me",
+                "file": "Report Data Hub.xlsx",
+                "table": "ReportTracking",
+                "body": {
+                  "Report ID": "RPT@{formatDateTime(utcNow(), 'yyyyMMddHHmmss')}",
+                  "Client ID": "@{items('Apply_to_each_client')?['Client ID']}",
+                  "Report Type": "Monthly Performance Report",
+                  "Generation Date": "@{formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')}",
+                  "Delivery Date": "@{formatDateTime(utcNow(), 'yyyy-MM-dd HH:mm:ss')}",
+                  "Report Status": "Delivered",
+                  "Data Sources Used": "Client Database, Performance Metrics",
+                  "Processing Time": "5 minutes",
+                  "Delivery Method": "Email",
+                  "Quality Score": "5.0"
+                }
+              }
+            }
+          }
+        },
+        "runAfter": {
+          "Get_Client_Data": [
+            "Succeeded"
+          ]
+        },
+        "type": "Foreach"
+      },
+      "Send_Completion_Notification": {
+        "runAfter": {
+          "Apply_to_each_client": [
+            "Succeeded"
+          ]
+        },
+        "type": "OpenApiConnection",
+        "inputs": {
+          "host": {
+            "connectionName": "shared_teams",
+            "operationId": "PostMessageToChannel",
+            "apiId": "/providers/Microsoft.PowerApps/apis/shared_teams"
+          },
+          "parameters": {
+            "poster": "Flow bot",
+            "location": "Channel",
+            "team": "Fiverr Automation Hub",
+            "channel": "System Alerts",
+            "message": "\ud83c\udf89 **Monthly Report Generation Complete!**\n                                \n**Summary:**\n- Reports generated: @{length(body('Get_Client_Data')?['value'])}\n- Processing time: @{formatDateTime(utcNow(), 'HH:mm:ss')}\n- All reports delivered successfully\n- Next generation: @{formatDateTime(addDays(utcNow(), 30), 'yyyy-MM-dd')}\n\n**Business Impact:**\n- Time saved: 4+ hours per report\n- Professional quality: Enterprise-grade\n- Client satisfaction: Automated excellence\n\nGenerated by DataPro Analytics Automation System"
+          }
+        }
+      }
+    }
+  }
+}

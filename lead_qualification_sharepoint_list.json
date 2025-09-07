@@ -1,0 +1,112 @@
+{
+  "displayName": "Lead Qualification Intake",
+  "description": "Lead qualification form responses with automated scoring",
+  "columns": [
+    {
+      "name": "SubmissionDate",
+      "type": "dateTime",
+      "required": true
+    },
+    {
+      "name": "ContactName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "CompanyName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "Email",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "Phone",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "ProjectType",
+      "type": "choice",
+      "choices": [
+        "Power Automate",
+        "Power BI",
+        "Integration",
+        "Migration",
+        "Other"
+      ]
+    },
+    {
+      "name": "BudgetRange",
+      "type": "choice",
+      "choices": [
+        "Under $10k",
+        "$10k-$50k",
+        "$50k-$100k",
+        "Over $100k"
+      ]
+    },
+    {
+      "name": "Timeline",
+      "type": "choice",
+      "choices": [
+        "ASAP",
+        "1-3 months",
+        "3-6 months",
+        "6+ months"
+      ]
+    },
+    {
+      "name": "DecisionMaker",
+      "type": "choice",
+      "choices": [
+        "Yes",
+        "No",
+        "Influencer"
+      ]
+    },
+    {
+      "name": "CurrentProcess",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "PainPoints",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "SuccessMetrics",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "LeadScore",
+      "type": "number",
+      "required": true
+    },
+    {
+      "name": "Priority",
+      "type": "choice",
+      "choices": [
+        "High",
+        "Medium",
+        "Low"
+      ]
+    },
+    {
+      "name": "Status",
+      "type": "choice",
+      "choices": [
+        "New",
+        "Qualified",
+        "Contacted",
+        "Proposal",
+        "Won",
+        "Lost"
+      ]
+    }
+  ]
+}

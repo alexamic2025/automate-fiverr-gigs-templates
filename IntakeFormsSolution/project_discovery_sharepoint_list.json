@@ -1,0 +1,86 @@
+{
+  "displayName": "Project Discovery Requirements",
+  "description": "Detailed project requirements and scope information",
+  "columns": [
+    {
+      "name": "SubmissionDate",
+      "type": "dateTime",
+      "required": true
+    },
+    {
+      "name": "ClientName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "ProjectName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "BusinessObjectives",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "Stakeholders",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "CurrentState",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "DesiredOutcomes",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "Constraints",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "Budget",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "Timeline",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "TechnicalComplexity",
+      "type": "choice",
+      "choices": [
+        "Low",
+        "Medium",
+        "High",
+        "Very High"
+      ]
+    },
+    {
+      "name": "RiskLevel",
+      "type": "choice",
+      "choices": [
+        "Low",
+        "Medium",
+        "High"
+      ]
+    },
+    {
+      "name": "ProjectStatus",
+      "type": "choice",
+      "choices": [
+        "Discovery",
+        "Scoping",
+        "Approved",
+        "In Progress",
+        "Complete"
+      ]
+    }
+  ]
+}

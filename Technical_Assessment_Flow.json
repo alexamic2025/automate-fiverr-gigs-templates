@@ -1,0 +1,26 @@
+{
+  "displayName": "Technical Assessment Processing",
+  "description": "Processes technical infrastructure assessments",
+  "triggerType": "Microsoft Forms - When a new response is submitted",
+  "actions": [
+    {
+      "name": "Risk Assessment",
+      "type": "Condition",
+      "condition": "equals(triggerOutputs()?['body/TechnicalRisk'], 'High')",
+      "ifYes": [
+        {
+          "name": "Alert Technical Team",
+          "type": "Send Email",
+          "to": "technical@company.com",
+          "subject": "High Risk Technical Assessment"
+        }
+      ]
+    },
+    {
+      "name": "Create SharePoint Item",
+      "type": "SharePoint - Create Item",
+      "siteUrl": "@{variables('SharePointSite')}",
+      "listName": "Technical Assessment"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "displayName": "Technical Assessment",
+  "description": "Technical infrastructure and capability assessment",
+  "columns": [
+    {
+      "name": "SubmissionDate",
+      "type": "dateTime",
+      "required": true
+    },
+    {
+      "name": "ClientName",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "CurrentSystems",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "TechnicalStack",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "SecurityRequirements",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "ComplianceNeeds",
+      "type": "text",
+      "required": false
+    },
+    {
+      "name": "PerformanceReqs",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "IntegrationPoints",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "TechnicalSkills",
+      "type": "text",
+      "required": true
+    },
+    {
+      "name": "InfrastructureReadiness",
+      "type": "choice",
+      "choices": [
+        "Ready",
+        "Minor Changes",
+        "Major Changes",
+        "Complete Overhaul"
+      ]
+    },
+    {
+      "name": "TechnicalRisk",
+      "type": "choice",
+      "choices": [
+        "Low",
+        "Medium",
+        "High",
+        "Critical"
+      ]
+    },
+    {
+      "name": "RecommendedApproach",
+      "type": "text",
+      "required": false
+    }
+  ]
+}
